@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
     @SerializedName("user_id")
-    private String UID;
+    private int UID;
     private String token;
     private String username;
     private String password;
@@ -22,7 +22,7 @@ public class User {
         return username;
     }
 
-    public String getUID(){
+    public int getUID(){
         return UID;
     }
 }
