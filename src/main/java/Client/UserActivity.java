@@ -1,20 +1,16 @@
 package Client;
 
 import Model.User;
+import Until.HttpUntil;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.util.EntityUtils;
+import javafx.util.Pair;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-import static Until.HttpUntil.*;
-
-public class UserActivity {
+public class UserActivity extends HttpUntil {
 
     private static Gson gson = new Gson();
     private static String loginURL = "https://api.shisanshui.rtxux.xyz/auth/login";
@@ -23,7 +19,9 @@ public class UserActivity {
 
     public static User login(User user){
         try{
-            String resJson = postRequest(loginURL, gson.toJson(user));
+            ArrayList<Pair<String, String>> t = new ArrayList<Pair<String, String>>();
+            t.add(new Pair<String, String>("json", gson.toJson(user)));
+            String resJson = postRequest(loginURL, t);
             JsonElement jsonElement = new JsonParser().parse(resJson);
             if(jsonElement.getAsJsonObject().get("status").getAsInt() == 0){
                 user = gson.fromJson(jsonElement.getAsJsonObject().get("data"), User.class);
@@ -35,6 +33,7 @@ public class UserActivity {
                 return null;
             }
         }catch (IOException ex){
+            System.out.println("访问失败");
             ex.printStackTrace();
             return null;
         }
@@ -42,7 +41,9 @@ public class UserActivity {
 
     public static boolean register(User user){
         try{
-            String resJson = postRequest(registerURL, gson.toJson(user));
+            ArrayList<Pair<String, String>> t = new ArrayList<Pair<String, String>>();
+            t.add(new Pair<String, String>("json", gson.toJson(user)));
+            String resJson = postRequest(registerURL, t);
             JsonElement jsonElement = new JsonParser().parse(resJson);
             if(jsonElement.getAsJsonObject().get("status").getAsInt() == 0) {
                 System.out.println("注册成功");
@@ -50,7 +51,6 @@ public class UserActivity {
             }
             else{
                 System.err.println("注册失败");
-                System.err.println(jsonElement.getAsJsonObject().get("data").getAsString());
                 return false;
             }
         }catch (IOException ex){
@@ -61,16 +61,9 @@ public class UserActivity {
 
     public static boolean logout(User user){
         try{
-            HttpClient httpClient = initHttpClient();
-            HttpPost post = new HttpPost(logoutURL);
-            post.setHeader("X-Auth-Token", user.getToken());
-            HttpResponse response = httpClient.execute(post);
-            if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK){
-                System.err.println("访问失败");
-                System.err.println(response.getStatusLine().getStatusCode());
-                return false;
-            }
-            JsonElement jsonElement = new JsonParser().parse(EntityUtils.toString(response.getEntity()));
+            ArrayList<Pair<String, String>> t = new ArrayList<Pair<String, String>>();
+            t.add(new Pair<String, String>("X-Auth-Token", user.getToken()));
+            JsonElement jsonElement = new JsonParser().parse(postRequest(logoutURL, t));
             if(jsonElement.getAsJsonObject().get("status").getAsInt() == 0){
                 System.out.println("注销成功");
                 return true;

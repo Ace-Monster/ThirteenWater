@@ -2,18 +2,24 @@
 
 ------
 
+**注意：所有涉及到User的接口均要求Token有效，若Token失效则会被清除**
+
 ## 用户数据类 Model.User
 - 构造函数 User()
     - 参数：String username, String password
 - getToken()
     - 参数：None
-    - 返回值：String token
+    - 返回值：String token, 注意若返回值为null则表示该玩家已掉线
 - getUID()
     - 参数：None
     - 返回值：int UID
 - getUsername()
     - 参数：None
     - 返回值：String username
+- logout()
+    - 参数：None
+    - 返回值：None
+    - 作用：清除Token
 
 ## 用户登录类 Client.UserActivity
 
@@ -27,7 +33,7 @@
     - 调用方法：将用户名和密码注入后调用接口
 - logout()
     - 参数：User user
-    - 返回值：boolean, true表示注册成功，false表示注册失败
+    - 返回值：boolean, true表示注销成功，false表示注销失败
     
 - **注意：该类的所有接口默认user有效，请在外部判断有效后调用**
 
@@ -49,7 +55,7 @@
     - 参数：None
     - 返回值：ArrayList<RankList>, null表示失败
     
-## 历史战绩列表数据类
+## 历史战绩数据类 Model.History
 
 - getHID()
     - 参数：None
@@ -68,5 +74,11 @@
 
 - getHistoryList()
     - 参数：User user
-    - 返回值：ArrayList<HistoryList>
-    - 调用方法：确保user登录状态下调用该方法
+    - 返回值：ArrayList<History>, null表示失败
+    - 注意：确保user登录状态下调用该方法
+- getHistory()
+    - 参数：User user, int HID
+    - 返回值：History, null表示失败
+    - 注意：确保user登录状态以及HID有效的情况下调用该方法
+
+## 游戏数据类

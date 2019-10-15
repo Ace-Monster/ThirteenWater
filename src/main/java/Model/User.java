@@ -25,4 +25,8 @@ public class User {
     public int getUID(){
         return UID;
     }
+
+    public void logout(){
+        this.token = null;
+    }
 }

@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class RankList {
     @SerializedName("player_id")
-    int UID;
-    String name;
-    int score;
+    private int UID;
+    private String name;
+    private int score;
 
     public int getUID() {
         return UID;
