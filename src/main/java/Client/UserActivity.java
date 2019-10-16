@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class UserActivity extends HttpUntil {
 
+    public static User user;
     private static Gson gson = new Gson();
     private static String loginURL = "https://api.shisanshui.rtxux.xyz/auth/login";
     private static String registerURL = "https://api.shisanshui.rtxux.xyz/auth/register";
