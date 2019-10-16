@@ -1,10 +1,9 @@
+package UI;
+
 import Client.UserActivity;
 import Model.User;
 
-import javax.jws.soap.SOAPBinding;
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

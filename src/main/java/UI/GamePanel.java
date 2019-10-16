@@ -1,4 +1,4 @@
-import Client.UserActivity;
+package UI;
 
 import javax.swing.*;
 import java.awt.*;

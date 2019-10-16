@@ -1,3 +1,5 @@
+package UI;
+
 import Client.RankActivity;
 import Model.RankList;
 
@@ -10,18 +12,17 @@ import java.awt.Font;
 
 import static java.lang.Math.max;
 
-public class PlayerPanel extends JPanel  {
-    public PlayerPanel(MyFrame frame) {
+public class RankListPanel extends JPanel  {
+    public RankListPanel(MyFrame frame) {
         this.frame = frame;
         W = frame.getWidth();
         H = frame.getHeight();
         row = 0;
         col = 0;
         setLayout(null);
-        background = new ImageIcon("pictures/tanfang.png").getImage();
-        initHistoryList();
+        background = new ImageIcon("pictures/lobby.jpg").getImage();
+        initRankList();
         if (rankList != null) {
-            System.out.println(1);
             initComponents();
             add(menuPanel);
             add(menu);
@@ -32,11 +33,10 @@ public class PlayerPanel extends JPanel  {
             rankPanel.add(ranklistHead);
             rankPanel.add(rankScroll);
         }
-
     }
 
     void initComponents() {
-        ranklistHead = new ImagePanel("pictures/playerIcon.jpg");
+        ranklistHead = new ImagePanel("pictures/ranklistLabel.png");
         backPanel = new JPanel();
         menu = new JButton();
         rankPanel = new ImagePanel("pictures/menu.png");
@@ -82,10 +82,11 @@ public class PlayerPanel extends JPanel  {
         rankScroll.getVerticalScrollBar().setValue(0) ;
     }
 
-    void initHistoryList() {
+    void initRankList() {
+        rankList = RankActivity.getRankList();
         if (rankList == null) {
             JLabel label = new JLabel();
-            label.setText("获取历史对局失败");
+            label.setText("获取排行榜失败");
             label.setForeground(Color.WHITE);
             label.setFont(new Font("微软雅黑", 1, 30));
             label.setBounds((W - 200) / 2, (H - 50) / 2, 300, 50);

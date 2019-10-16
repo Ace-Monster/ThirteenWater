@@ -1,5 +1,6 @@
+package UI;
+
 import Client.UserActivity;
-import Model.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -131,7 +132,7 @@ public class LoginPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (UserActivity.user == null) {
                     frame.getContentPane().removeAll();
-                    //frame.setContentPane(new TitlePanel(frame));
+                    //frame.setContentPane(new UI.TitlePanel(frame));
                     frame.setContentPane(new GameLobbyPanel(frame));
                     frame.setVisible(true);
                 }
