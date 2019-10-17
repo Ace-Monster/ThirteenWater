@@ -198,7 +198,9 @@ public class GameLogic {
                         if(card[i1][j] == 0) continue;
                         for(int i2 = i1+1;i2 < 4;i2++){
                             if(card[i2][j] == 0) continue;
-                            Poker t = new Poker(Type.Ty22 + lj);
+                            Poker t;
+                            if(lj-j == 1)t = new Poker(Type.Ty221+lj);
+                            else t = new Poker(Type.Ty22 + lj);
                             t.add(li1, lj);t.add(li2, lj);
                             t.add(i1, j);t.add(i2, j);
                             res.add(t);
