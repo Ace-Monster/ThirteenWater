@@ -1,5 +1,5 @@
 # ThirteenWater
-A mini game in Fujian, China<br>
+A mini gameData in Fujian, China<br>
 一个来自中国福建的民间小游戏
 
 ------

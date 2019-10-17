@@ -81,4 +81,19 @@
     - 返回值：History, null表示失败
     - 注意：确保user登录状态以及HID有效的情况下调用该方法
 
-## 游戏数据类
+## 游戏数据操作类
+
+- gameStar()
+    - 参数：User user
+    - 返回值：GameData, null表示失败
+- submitCard()
+    - 参数：User user, GamePlay gamePlay
+    - 返回值：boolean，true 表示成功
+    
+# 游戏逻辑类 AI.GameLogic
+
+- 构造函数GameLogic()
+    - 参数：GameData gameData
+- playing()
+    - 参数：None
+    - 返回值：GamePlay

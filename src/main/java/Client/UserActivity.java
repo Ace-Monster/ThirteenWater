@@ -25,8 +25,10 @@ public class UserActivity extends HttpUntil {
             String resJson = postRequest(loginURL, t);
             JsonElement jsonElement = new JsonParser().parse(resJson);
             if(jsonElement.getAsJsonObject().get("status").getAsInt() == 0){
+                String username = user.getUsername();
                 user = gson.fromJson(jsonElement.getAsJsonObject().get("data"), User.class);
                 System.out.println("登录成功");
+                user.setUsername(username);
                 return user;
             }else{
                 System.err.println("登录失败");
