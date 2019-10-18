@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Poker {
 
-    private int rank;
+    private long rank;
     private ArrayList<Pair<Integer, Integer>> pk;
 
     private String regColor(int s){
@@ -25,7 +25,7 @@ public class Poker {
         return Integer.toString(s+1);
     }
 
-    public Poker(int rank){
+    public Poker(long rank){
         this.rank = rank;
         pk = new ArrayList<Pair<Integer, Integer>>();
     }
@@ -34,8 +34,12 @@ public class Poker {
         pk.add(new Pair<Integer, Integer>(color, digital));
     }
 
-    public int getRank() {
+    public long getRank() {
         return rank;
+    }
+
+    public void addRank(long rank) {
+        this.rank += rank;
     }
 
     public ArrayList<Pair<Integer, Integer>> getPk() {

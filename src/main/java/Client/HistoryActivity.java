@@ -51,7 +51,7 @@ public class HistoryActivity extends HttpUntil{
             String resJson = getRequest(url, user.getToken());
             JsonElement jsonElement = new JsonParser().parse(resJson);
             System.out.println("详细战绩获取成功");
-            return gson.fromJson(jsonElement.getAsJsonObject().get("data").getAsString(), History.class);
+            return gson.fromJson(jsonElement.getAsJsonObject().get("data").toString(), History.class);
         }catch (IOException ex){
             System.err.println("访问失败");
             ex.printStackTrace();

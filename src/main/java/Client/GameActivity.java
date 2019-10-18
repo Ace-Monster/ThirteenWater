@@ -43,6 +43,7 @@ public class GameActivity extends HttpUntil {
         }catch (IOException ex){
             System.err.println("访问失败");
             ex.printStackTrace();
+            System.out.println(gamePlay.getCard().get(0));
             if(ex.getMessage().equals("403")) user.logout();
             return false;
         }
