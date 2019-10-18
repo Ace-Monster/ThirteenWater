@@ -24,7 +24,6 @@ public class RankListPanel extends JPanel  {
         initRankList();
         if (rankList != null) {
             initComponents();
-            add(menuPanel);
             add(menu);
             add(backPanel);
             backPanel.setLayout(null);
@@ -44,25 +43,20 @@ public class RankListPanel extends JPanel  {
         backPanel.setBackground(new Color(96, 96, 96, 120));
         backPanel.setBounds(W / 12, H / 7, 5 * W / 6, 5 * H / 7);
 
-        menu.setText("菜单");
+        menu = new JButton();
+        menu.setText("关闭");
         menu.setFont(new Font("微软雅黑", 1, 30));
-        menu.setForeground(Color.WHITE);
+        menu.setForeground(Color.RED);
         menu.setContentAreaFilled(false);
         menu.setBounds(W - H / 6, 10, H / 7, H / 12);
         menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (menuPanel.isVisible() == false) {
-                    menuPanel.setVisible(true);
-                    updateUI();
-                    repaint();
-                }
+                frame.getContentPane().removeAll();
+                frame.setContentPane(new GameLobbyPanel(frame));
+                frame.setVisible(true);
             }
         });
-
-        menuPanel = new MenuPanel(frame);
-        menuPanel.setVisible(false);
-        menuPanel.setBounds(W / 4, H / 4, W / 2, H / 2);
 
         //ranklistHead.setBounds(5 * W / 12 - 75, (H / 7 - 50) / 2, 150, 50);
         ranklistHead.setBounds((3 * W / 4 - 150) / 2, 45, 150, 50);
@@ -139,7 +133,6 @@ public class RankListPanel extends JPanel  {
     private JButton menu;
     private MyFrame frame;
     private JPanel backPanel;
-    private MenuPanel menuPanel;
     private ImagePanel ranklistHead;
     private ImagePanel rankPanel;
     private JTextArea rankArea;

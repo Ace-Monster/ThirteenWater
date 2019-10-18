@@ -1,5 +1,11 @@
 package UI;
 
+import AI.GameLogic;
+import Client.GameActivity;
+import Client.UserActivity;
+import Model.GameData;
+import Model.GamePlay;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,6 +13,8 @@ import java.awt.event.ActionListener;
 public class GamePanel extends JPanel {
     public GamePanel(MyFrame frame) {
         this.frame = frame;
+        gameDatas = GameActivity.gameStar(UserActivity.user);
+        gamePlay = new GameLogic(gameDatas).playing();
         W = frame.getWidth();
         H = frame.getHeight();
         setLayout(null);
@@ -89,9 +97,9 @@ public class GamePanel extends JPanel {
 
         power.setBounds(10, 10, H / 8, H / 15);
 
-        //playerName.setText(UserActivity.user.getUsername());
-        playerName.setText("Stolf");
-        playerName.setFont(new Font("微软雅黑", 1, 25));
+        playerName.setText(UserActivity.user.getUsername());
+        //playerName.setText("Stolf");
+        playerName.setFont(new Font("微软雅黑", 1, 20));
         playerName.setForeground(Color.WHITE);
         playerName.setBounds(W / 7 + W / 40, 5 * H / 7 - H / 20 + 3 * H / 20, H / 7, H / 26);
         playerName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -113,7 +121,7 @@ public class GamePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
                     frame.getContentPane().removeAll();
-                    frame.setContentPane(new PlayerPanel(frame));
+                    frame.setContentPane(new PlayerPanel(frame, false));
                     frame.setVisible(true);
                 }
             }
@@ -154,11 +162,9 @@ public class GamePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
-                    //scorePanel.setVisible(true);
-                    scoreboard.setEnabled(false);
-                    menu.setEnabled(false);
-                    updateUI();
-                    repaint();
+                    frame.getContentPane().removeAll();
+                    frame.setContentPane(new GamePanel(frame));
+                    frame.setVisible(true);
                 }
             }
         });
@@ -172,9 +178,47 @@ public class GamePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
-                    //scorePanel.setVisible(true);
+                    JPanel jp = new JPanel();
+                    jp.setBackground(new Color(96, 96, 96, 120));
+                    jp.setBounds(550, 500, 500, 120);
+                    jp.setLayout(null);
+                    JButton jb = new JButton();
+                    jb.setText("X");
+                    jb.setFont(new Font("微软雅黑", 1, 20));
+                    jb.setBackground(Color.RED);
+                    jb.setForeground(Color.WHITE);
+                    jb.setBounds(450, 0, 50, 50);
+                    jb.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            remove(jp);
+                            playerIconButton.setEnabled(true);
+                            scoreboard.setEnabled(true);
+                            menu.setEnabled(true);
+                            showFore.setEnabled(true);
+                            showMid.setEnabled(true);
+                            showBack.setEnabled(true);
+                            draw.setEnabled(true);
+                            updateUI();
+                            repaint();
+                        }
+                    });
+                    JLabel jl = new JLabel();
+                    jl.setFont(new Font("微软雅黑", 1, 20));
+                    jl.setBounds(150, 35,200, 50);
+
+                    jl.setText(gamePlay.getCard().get(0).toString());
+                    jl.setForeground(new Color(55, 155, 211));
+                    jp.add(jb);
+                    jp.add(jl);
+                    add(jp);
+                    playerIconButton.setEnabled(false);
                     scoreboard.setEnabled(false);
                     menu.setEnabled(false);
+                    showFore.setEnabled(false);
+                    showMid.setEnabled(false);
+                    showBack.setEnabled(false);
+                    draw.setEnabled(false);
                     updateUI();
                     repaint();
                 }
@@ -190,9 +234,47 @@ public class GamePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
-                    //scorePanel.setVisible(true);
+                    JPanel jp = new JPanel();
+                    jp.setBackground(new Color(96, 96, 96, 120));
+                    jp.setBounds(550, 500, 500, 120);
+                    jp.setLayout(null);
+                    JButton jb = new JButton();
+                    jb.setText("X");
+                    jb.setFont(new Font("微软雅黑", 1, 20));
+                    jb.setBackground(Color.RED);
+                    jb.setForeground(Color.WHITE);
+                    jb.setBounds(450, 0, 50, 50);
+                    jb.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            remove(jp);
+                            playerIconButton.setEnabled(true);
+                            scoreboard.setEnabled(true);
+                            menu.setEnabled(true);
+                            showFore.setEnabled(true);
+                            showMid.setEnabled(true);
+                            showBack.setEnabled(true);
+                            draw.setEnabled(true);
+                            updateUI();
+                            repaint();
+                        }
+                    });
+                    JLabel jl = new JLabel();
+                    jl.setFont(new Font("微软雅黑", 1, 20));
+                    jl.setBounds(150, 35,200, 50);
+
+                    jl.setText(gamePlay.getCard().get(1).toString());
+                    jl.setForeground(new Color(55, 155, 211));
+                    jp.add(jb);
+                    jp.add(jl);
+                    add(jp);
+                    playerIconButton.setEnabled(false);
                     scoreboard.setEnabled(false);
                     menu.setEnabled(false);
+                    showFore.setEnabled(false);
+                    showMid.setEnabled(false);
+                    showBack.setEnabled(false);
+                    draw.setEnabled(false);
                     updateUI();
                     repaint();
                 }
@@ -208,9 +290,47 @@ public class GamePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
-                    //scorePanel.setVisible(true);
+                    JPanel jp = new JPanel();
+                    jp.setBackground(new Color(96, 96, 96, 120));
+                    jp.setBounds(550, 500, 500, 120);
+                    jp.setLayout(null);
+                    JButton jb = new JButton();
+                    jb.setText("X");
+                    jb.setFont(new Font("微软雅黑", 1, 20));
+                    jb.setBackground(Color.RED);
+                    jb.setForeground(Color.WHITE);
+                    jb.setBounds(450, 0, 50, 50);
+                    jb.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            remove(jp);
+                            playerIconButton.setEnabled(true);
+                            scoreboard.setEnabled(true);
+                            menu.setEnabled(true);
+                            showFore.setEnabled(true);
+                            showMid.setEnabled(true);
+                            showBack.setEnabled(true);
+                            draw.setEnabled(true);
+                            updateUI();
+                            repaint();
+                        }
+                    });
+                    JLabel jl = new JLabel();
+                    jl.setFont(new Font("微软雅黑", 1, 20));
+                    jl.setBounds(150, 35,200, 50);
+
+                    jl.setText(gamePlay.getCard().get(2).toString());
+                    jl.setForeground(new Color(55, 155, 211));
+                    jp.add(jb);
+                    jp.add(jl);
+                    add(jp);
+                    playerIconButton.setEnabled(false);
                     scoreboard.setEnabled(false);
                     menu.setEnabled(false);
+                    showFore.setEnabled(false);
+                    showMid.setEnabled(false);
+                    showBack.setEnabled(false);
+                    draw.setEnabled(false);
                     updateUI();
                     repaint();
                 }
@@ -245,4 +365,6 @@ public class GamePanel extends JPanel {
     private JButton showFore;
     private JButton showMid;
     private JButton showBack;
+    private GameData gameDatas;
+    private GamePlay gamePlay;
 }

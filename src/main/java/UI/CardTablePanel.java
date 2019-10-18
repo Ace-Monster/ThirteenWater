@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class CardTablePanel extends JPanel {
     public CardTablePanel(MyFrame frame) {
@@ -18,7 +19,6 @@ public class CardTablePanel extends JPanel {
         initComponents();
 
         add(menu);
-        add(menuPanel);
         add(backPanel);
         backPanel.setLayout(null);
         backPanel.add(searchLabel);
@@ -36,25 +36,20 @@ public class CardTablePanel extends JPanel {
         searchText = new JTextField();
         confirmSearch = new JButton();
 
-        menu.setText("菜单");
+        menu = new JButton();
+        menu.setText("关闭");
         menu.setFont(new Font("微软雅黑", 1, 30));
-        menu.setForeground(Color.WHITE);
+        menu.setForeground(Color.RED);
         menu.setContentAreaFilled(false);
         menu.setBounds(W - H / 6, 10, H / 7, H / 12);
         menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (menuPanel.isVisible() == false) {
-                    menuPanel.setVisible(true);
-                    updateUI();
-                    repaint();
-                }
+                frame.getContentPane().removeAll();
+                frame.setContentPane(new GameLobbyPanel(frame));
+                frame.setVisible(true);
             }
         });
-
-        menuPanel = new MenuPanel(frame);
-        menuPanel.setVisible(false);
-        menuPanel.setBounds(W / 4, H / 4, W / 2, H / 2);
 
         backPanel.setBackground(new Color(96, 96, 96, 120));
         backPanel.setBounds(W / 12, H / 7, 5 * W / 6, 5 * H / 7);
@@ -77,16 +72,24 @@ public class CardTablePanel extends JPanel {
         confirmSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                searchPanel.removeAll();
                 History history = HistoryActivity.getHistory(UserActivity.user, Integer.valueOf(searchText.getText()).intValue());
                 if (history != null) {
-                    System.out.println(history.getCard());
-                    System.out.println(history.getHID());
-                    System.out.println(history.getScore());
-                    System.out.println(history.getTimeStamp());
+                    ArrayList<History.Detail> details = history.getDetails();
+                    for (History.Detail d : details) {
+                        String s = new String();
+                        s += "{用户ID:" + d.UID + "} {用户名:" + d.name + "} {牌型:" + d.card + "} {得分:" + d.score + '}';
+                        JButton b = new JButton(s);
+                        b.setFont(new Font("微软雅黑", 1, 23));
+                        b.setForeground(Color.WHITE);
+                        b.setBackground(new Color(55, 155, 211));
+                        //b.setContentAreaFilled(false);
+                        b.setPreferredSize(new Dimension(3 * W / 4 - 10, H / 8 - 5));
+                        searchPanel.add(b);
+                    }
                 }
-                else {
-                    System.out.println(1);
-                }
+                updateUI();
+                repaint();
             }
         });
     }
@@ -100,7 +103,6 @@ public class CardTablePanel extends JPanel {
     private int W;
     private int H;
     private Image background;
-    private MenuPanel menuPanel;
     private JButton menu;
     private JPanel backPanel;
     private JPanel searchPanel;

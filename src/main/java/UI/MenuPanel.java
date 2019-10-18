@@ -8,7 +8,7 @@ public class MenuPanel extends JPanel  {
     public MenuPanel(MyFrame frame) {
         this.frame = frame;
         inLobby = false;
-        background = new ImageIcon("pictures\\menu.png").getImage();
+        background = new ImageIcon("pictures/menu.png").getImage();
         setLayout(null);
         initComponent();
         add(menuContent);
@@ -16,7 +16,8 @@ public class MenuPanel extends JPanel  {
         add(exitGame);
     }
 
-    public MenuPanel(JButton b1, JButton b2, JButton b3) {
+    public MenuPanel(JButton b1, JButton b2, JButton b3, MyFrame frame) {
+        this.frame = frame;
         this.b1 = b1;
         this.b2 = b2;
         this.b3 = b3;
@@ -47,8 +48,11 @@ public class MenuPanel extends JPanel  {
         exitGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (inLobby)
-                    System.exit(0);
+                if (inLobby) {
+                    frame.getContentPane().removeAll();
+                    frame.setContentPane(new TitlePanel(frame));
+                    frame.setVisible(true);
+                }
                 else {
                     frame.getContentPane().removeAll();
                     frame.setContentPane(new GameLobbyPanel(frame));
