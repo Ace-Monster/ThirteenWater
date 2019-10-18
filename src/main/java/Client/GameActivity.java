@@ -35,7 +35,8 @@ public class GameActivity extends HttpUntil {
     public static boolean submitCard(User user, GamePlay gamePlay){
         try {
             ArrayList<Pair<String, String>> t = new ArrayList<Pair<String, String>>();
-            t.add(new Pair<String, String>("json", gson.toJson(gamePlay, GamePlay.class)));
+            JsonElement jsonElement = gson.toJsonTree(gamePlay);
+            t.add(new Pair<String, String>("json", jsonElement.toString()));
             t.add(new Pair<String, String>("X-Auth-Token", user.getToken()));
             postRequest(playURL, t);
             return true;
