@@ -1,5 +1,7 @@
 package UI;
 
+import Client.UserActivity;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -54,15 +56,15 @@ public class GameLobbyPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (menuPanel.isVisible() == false) {
                     frame.getContentPane().removeAll();
-                    frame.setContentPane(new PlayerPanel(frame));
+                    frame.setContentPane(new PlayerPanel(frame, true));
                     frame.setVisible(true);
                 }
             }
         });
 
-        //playerName.setText(UserActivity.user.getUsername());
-        playerName.setText("Stolf");
-        playerName.setFont(new Font("微软雅黑", 1, 30));
+        playerName.setText(UserActivity.user.getUsername());
+        //playerName.setText("Stolf");
+        playerName.setFont(new Font("微软雅黑", 1, 20));
         playerName.setForeground(Color.WHITE);
         playerName.setBounds(2 * W / 50 + H / 6, H / 45, W / 10, H / 20);
         playerName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -169,7 +171,7 @@ public class GameLobbyPanel extends JPanel {
             }
         });
 
-        menuPanel = new MenuPanel(quickMatch, arenaMatch, friendMatch);
+        menuPanel = new MenuPanel(quickMatch, arenaMatch, friendMatch, frame);
         menuPanel.setVisible(false);
         menuPanel.setBounds(W / 4, H / 4, W / 2, H / 2);
     }

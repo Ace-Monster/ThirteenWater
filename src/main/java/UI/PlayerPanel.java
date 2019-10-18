@@ -1,5 +1,8 @@
 package UI;
 
+import Client.HistoryActivity;
+import Client.UserActivity;
+import Model.History;
 import Model.RankList;
 
 import javax.swing.*;
@@ -12,76 +15,73 @@ import java.awt.Font;
 import static java.lang.Math.max;
 
 public class PlayerPanel extends JPanel  {
-    public PlayerPanel(MyFrame frame) {
+    public PlayerPanel(MyFrame frame, boolean inLobby) {
+        this.inLobby = inLobby;
         this.frame = frame;
         W = frame.getWidth();
         H = frame.getHeight();
         setLayout(null);
+
         background = new ImageIcon("pictures/tanfang.png").getImage();
         initHistoryList();
-        if (rankList != null) {
+        if (historyList != null) {
             initComponents();
-            add(menuPanel);
-            add(menu);
-            add(backPanel);
-            backPanel.setLayout(null);
-            backPanel.add(rankPanel);
-            rankPanel.setLayout(null);
-            rankPanel.add(ranklistHead);
-            rankPanel.add(rankScroll);
         }
-
     }
 
     void initComponents() {
-        ranklistHead = new ImagePanel("pictures/playerIcon.jpg");
-        backPanel = new JPanel();
         menu = new JButton();
-        rankPanel = new ImagePanel("pictures/menu.png");
-
-        backPanel.setBackground(new Color(96, 96, 96, 120));
-        backPanel.setBounds(W / 12, H / 7, 5 * W / 6, 5 * H / 7);
-
-        menu.setText("菜单");
+        add(menu);
+        menu.setText("关闭");
         menu.setFont(new Font("微软雅黑", 1, 30));
-        menu.setForeground(Color.WHITE);
+        menu.setForeground(Color.RED);
         menu.setContentAreaFilled(false);
         menu.setBounds(W - H / 6, 10, H / 7, H / 12);
         menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (menuPanel.isVisible() == false) {
-                    menuPanel.setVisible(true);
-                    updateUI();
-                    repaint();
-                }
+                frame.getContentPane().removeAll();
+                if (inLobby)
+                    frame.setContentPane(new GameLobbyPanel(frame));
+                else
+                    frame.setContentPane(new GamePanel(frame));
+                frame.setVisible(true);
             }
         });
 
-        menuPanel = new MenuPanel(frame);
-        menuPanel.setVisible(false);
-        menuPanel.setBounds(W / 4, H / 4, W / 2, H / 2);
+        backPanel = new ImagePanel("pictures/menu.png");
+        backPanel.setBounds(100, 50, 1400, 800);
+        backPanel.setLayout(null);
+        add(backPanel);
 
-        //ranklistHead.setBounds(5 * W / 12 - 75, (H / 7 - 50) / 2, 150, 50);
-        ranklistHead.setBounds((3 * W / 4 - 150) / 2, 45, 150, 50);
+        infoPanel = new JPanel();
+        infoPanel.setBounds(100, 110, 1200, 650);
+        infoPanel.setBackground(new Color(96, 96, 96, 120));
+        infoPanel.setLayout(null);
+        backPanel.add(infoPanel);
 
-        //rankPanel.setBackground(new Color(254, 254, 254, 120));
-        rankPanel.setBounds((5 * W / 6 - 3 * W / 4) / 2, 50, 3 * W / 4,  2 * H / 3);
+        playerIcon = new ImagePanel("pictures/playerIcon.jpg");
+        playerIcon.setBounds(25, 25, 150, 150);
+        infoPanel.add(playerIcon);
 
-        rankArea.setRows(row);
-        rankArea.setColumns(col);
-        rankArea.setFont(new Font("微软雅黑", 1, 20));
-        rankArea.setBackground(new Color(16, 18, 53));
-        rankArea.setEnabled(false);
+        playerTitle = new ImagePanel("pictures/huntian.png");
+        playerTitle.setBounds(25, 200, 150, 150);
+        infoPanel.add(playerTitle);
 
-        rankScroll = new JScrollPane(rankArea);
-        //rankScroll.setBorder(null);
-        rankScroll.setBounds(100, 100, 3 * W / 4 - 200, 2 * H / 3 - 150);
-        rankScroll.getVerticalScrollBar().setValue(0) ;
+        scrollPanel.setBackground(new Color(96, 96, 96, 120));
+
+        infoScroll = new JScrollPane(scrollPanel);
+        infoScroll.setBounds(200, 0, 1000, 700);
+        infoPanel.add(infoScroll);
+        infoScroll.getVerticalScrollBar().setUnitIncrement(20);
+
     }
 
     void initHistoryList() {
-        if (rankList == null) {
+        scrollPanel = new JPanel();
+        scrollPanel.setLayout(new GridLayout(100, 1, 5, 5));
+        historyList = HistoryActivity.getHistoryList(UserActivity.user);
+        if (historyList == null) {
             JLabel label = new JLabel();
             label.setText("获取历史对局失败");
             label.setForeground(Color.WHITE);
@@ -104,22 +104,16 @@ public class PlayerPanel extends JPanel  {
             add(button);
         }
         else {
-            rankArea = new JTextArea();
-            Font f = new Font("微软雅黑", 1, 20);
-            FontMetrics fm = sun.font.FontDesignMetrics.getMetrics(f);
-            int cnt = 0;
-            for (RankList rank : rankList) {
-                row++;
-                String sRank = "\tRank " + ++cnt + "\tID:" + rank.getUID() + "\t用户名:" + rank.getName();
-                String text = rank.getName();
-                int textwidth = fm.stringWidth(text);
-
-                //System.out.println(text + textwidth);
-
-                if (textwidth > 93) sRank += "\t分数:" + rank.getScore() + "\n";
-                else sRank += "\t\t分数:" + rank.getScore() + "\n";
-                rankArea.append(sRank);
-                col = max(col, sRank.length());
+            for (History h : historyList) {
+                String s = new String();
+                s += "{战局ID:" + h.getHID() + "} {牌型:" + h.getCard() + "} {得分:" + h.getScore() + '}';
+                JButton b = new JButton(s);
+                b.setFont(new Font("微软雅黑", 1, 23));
+                b.setForeground(Color.WHITE);
+                b.setBackground(new Color(55, 155, 211));
+                //b.setContentAreaFilled(false);
+                b.setPreferredSize(new Dimension(995, 70));
+                scrollPanel.add(b);
             }
         }
     }
@@ -129,18 +123,17 @@ public class PlayerPanel extends JPanel  {
         graphics.drawImage(background, 0, 0, W, H, this);
     }
 
-    private ArrayList<RankList> rankList;
     private Image background;
     private int W;
     private int H;
     private JButton menu;
     private MyFrame frame;
-    private JPanel backPanel;
-    private MenuPanel menuPanel;
-    private ImagePanel ranklistHead;
-    private ImagePanel rankPanel;
-    private JTextArea rankArea;
-    private JScrollPane rankScroll;
-    private int row;
-    private int col;
+    private ArrayList<History> historyList;
+    private ImagePanel backPanel;
+    private JPanel infoPanel;
+    private ImagePanel playerIcon;
+    private ImagePanel playerTitle;
+    private JScrollPane infoScroll;
+    private JPanel scrollPanel;
+    private boolean inLobby;
 }
