@@ -141,8 +141,8 @@ public class GameLogic {
         if(newer == null) return older;
         int[] sum = new int[2];
         //后墩一定相同不用比较
-        for(int i = 1;i >= 0;i--) {
-            int x = newer.getCard().get(i).getRank(), y = older.getCard().get(i).getRank();
+        for(int i = 2;i >= 0;i--) {
+            long x = newer.getCard().get(i).getRank(), y = older.getCard().get(i).getRank();
             if (x < y) sum[1]++;
             if (x > y) sum[0]++;
         }
@@ -157,7 +157,7 @@ public class GameLogic {
         for(int j = 13;j >= 1;j--){
             for(int i = 0;i < 4;i++) {
                 if(card[i][j] == 0) continue;
-                Poker t = new Poker(Type.Base+j);
+                Poker t = new Poker(Type.Base+j*Type.First);
                 t.add(i, j);
                 res.add(t);
             }
@@ -174,7 +174,7 @@ public class GameLogic {
                     if(card[i][j] != 1) continue;
                     for(int k = i+1;k < 4;k++) {
                         if(card[k][j] != 1) continue;
-                        Poker t = new Poker(Type.Ty20 + j);
+                        Poker t = new Poker(Type.Ty20 + j*Type.First);
                         t.add(i, j);
                         t.add(k, j);
                         res.add(t);
@@ -199,8 +199,8 @@ public class GameLogic {
                         for(int i2 = i1+1;i2 < 4;i2++){
                             if(card[i2][j] == 0) continue;
                             Poker t;
-                            if(lj-j == 1)t = new Poker(Type.Ty221+lj);
-                            else t = new Poker(Type.Ty22 + lj);
+                            if(lj-j == 1)t = new Poker(Type.Ty221 + lj*Type.First + j*Type.Second);
+                            else t = new Poker(Type.Ty22 + lj*Type.First + j*Type.Second);
                             t.add(li1, lj);t.add(li2, lj);
                             t.add(i1, j);t.add(i2, j);
                             res.add(t);
@@ -238,7 +238,7 @@ public class GameLogic {
                         if(card[k][j] != 1) continue;
                         for(int l = k+1;l < 4;l++){
                             if(card[l][j] != 1) continue;
-                            Poker t = new Poker(Type.Ty30 + j);
+                            Poker t = new Poker(Type.Ty30 + j*Type.First);
                             t.add(i, j);
                             t.add(k, j);
                             t.add(l, j);
@@ -262,7 +262,7 @@ public class GameLogic {
         for(int i = 0;i < 4;i++)
             if(card[i][j] != 0) {
                 Poker tt;
-                if(t == null) tt = new Poker(Type.Tysz+j);
+                if(t == null) tt = new Poker(Type.Tysz + j*Type.First);
                 else tt = t.clone();
                 tt.add(i, j);
                 chk = chk|isSZ(n+1, j-1, card, res, tt);
@@ -280,10 +280,11 @@ public class GameLogic {
         if(j == 0) return;
         Poker tt = null;
         if(t != null) tt = t.clone();
-        else tt = new Poker(Type.Tysc+j);
+        else tt = new Poker(Type.Tysc);
         int tn = n;
         if(card[i][j] == 1) {
             tt.add(i, j);
+            tt.addRank(Type.CardRank[tt.getPk().size()-1]);
             tn++;
             card[i][j] = 0;
             dfsSC(tn, i, j + 1, card, res, tt);
@@ -327,7 +328,7 @@ public class GameLogic {
                                         for(int i22 = i11+1;i22 < 4;i22++){
                                             if(card[i22][j2] == 0) continue;
                                             chk = true;
-                                            Poker t = new Poker(Type.Ty32+j1);
+                                            Poker t = new Poker(Type.Ty32 + j1*Type.First);
                                             t.add(i1, j1);t.add(i2,j1);t.add(i3, j1);
                                             t.add(i11, j2);t.add(i22, j2);
                                             res.add(t);
@@ -463,6 +464,28 @@ public class GameLogic {
         return res;
     }
 
+    private ArrayList<Poker> getFront(Poker middle, Poker back){
+        int[][] tmp = new int[4][];
+        for(int i = 0;i < 4;i++) tmp[i] = card[i].clone();
+        int[] color = this.color.clone();
+        int[] digital = this.digital.clone();
+        for(int i = 0;i < back.getPk().size();i++) {
+            tmp[back.getPk().get(i).getKey()][back.getPk().get(i).getValue()]--;
+            color[back.getPk().get(i).getKey()]--;
+            digital[back.getPk().get(i).getValue()]--;
+        }
+        for(int i = 0;i < middle.getPk().size();i++) {
+            tmp[middle.getPk().get(i).getKey()][middle.getPk().get(i).getValue()]--;
+            color[middle.getPk().get(i).getKey()]--;
+            digital[middle.getPk().get(i).getValue()]--;
+        }
+        ArrayList<Poker> res = new ArrayList<Poker>();
+        if(middle.getRank() >= Type.Ty30 && back.getRank() >= Type.Ty30) is30(digital, tmp,res);
+        if(middle.getRank() >= Type.Ty20 && back.getRank() >= Type.Ty20) is20(digital, tmp,res);
+        Base(tmp, res);
+        return res;
+    }
+
     private void fixPoker(Poker front, Poker middle, Poker back) {
         int[][] tmp = new int[4][];
         for(int i = 0;i < 4;i++) tmp[i] = card[i].clone();
@@ -476,8 +499,8 @@ public class GameLogic {
             tmp[front.getPk().get(i).getKey()][front.getPk().get(i).getValue()]--;
         }
         Queue<Pair<Integer, Integer>> q = new LinkedList<Pair<Integer, Integer>>();
-        for (int i = 0; i < 4; i++) {
-            for (int j = 1; j <= 13; j++) {
+        for (int j = 1; j <= 13; j++) {
+            for (int i = 0; i < 4; i++) {
                 for(int k = 0;k < tmp[i][j];k++)
                 q.add(new Pair<Integer, Integer>(i, j));
             }
@@ -497,15 +520,22 @@ public class GameLogic {
         GamePlay ans = new GamePlay(gameData.getGID());
         if(isDragon() || isAllBest() || isThreeBoom() || isTwoColor() ||
                 isTwoThree(0,0,1) || isThreeStraight(card,1,0,3)) {
-            Poker master = new Poker(Type.Tymaster);
+            int n = 0;
+            Poker t = new Poker(Type.Tymaster);
+            ans = new GamePlay(gameData.getGID());
             for (int i = 0; i < 4; i++)
                 for (int j = 1; j <= 13; j++) {
-                    if(card[i][j] == 0) continue;
-                    master.add(i, j);
+                    if(card[i][j] == 1){
+                        t.add(i, j);
+                    }
+                    if((n == 0 && t.getPk().size() == 3) || (t.getPk().size() == 5)){
+                        ans.add(t);
+                        n++;
+                        t = new Poker(Type.Tymaster);
+                    }
                 }
-            ans = new GamePlay(gameData.getGID());
-            ans.add(master.toString());
             System.out.println("supper");
+            for(int i = 0;i < 3;i++) ans.add(ans.getCard().get(i).toString());
             return ans;
         }
 
@@ -525,16 +555,16 @@ public class GameLogic {
             ArrayList<Poker> middle = getMiddle(tback);
             if(middle != null)
                 for(int j = 0;j < middle.size();j++){
-                    Poker tmiddle = middle.get(i);
-                    ArrayList<Poker> front = getFront(tmiddle);
+                    Poker tmiddle = middle.get(j);
+                    ArrayList<Poker> front = getFront(tmiddle, tback);
                     for(int k = 0;k < front.size();k++) {
-                        Poker tfront = front.get(j);
+                        Poker tfront = front.get(k);
                         if (isValue(tfront, tmiddle, tback)) {
                             Poker ttfront = tfront.clone();
                             Poker ttmiddle = tmiddle.clone();
                             Poker ttback = tback.clone();
                             fixPoker(ttfront, ttmiddle, ttback);
-                            System.out.println(ttmiddle);
+                            System.out.println(ttfront);
                             System.out.println(ttmiddle);
                             System.out.println(ttback);
                             ans = max(1, new GamePlay(gameData.getGID(), ttfront, ttmiddle, ttback), ans);

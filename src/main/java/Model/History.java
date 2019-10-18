@@ -7,17 +7,18 @@ import java.util.ArrayList;
 public class History {
     @SerializedName("id")
     private int HID;
-    private ArrayList<String> card;
+    private ArrayList<String> card = new ArrayList<>();
     private int score;
     private int timeStamp;
-    private class Detail{
+    public class Detail{
         public String name;
-        public ArrayList<String> card;
-        int score;
+        public ArrayList<String> card = new ArrayList<>();
+        public int score;
         @SerializedName("player_id")
-        int UID;
+        public int UID;
     }
-    private ArrayList<Detail> details;
+    @SerializedName("detail")
+    private ArrayList<Detail> details = new ArrayList<>();
 
     public int getHID() {
         return HID;
@@ -38,4 +39,6 @@ public class History {
     public ArrayList<Detail> getDetails() {
         return details;
     }
+
+
 }
