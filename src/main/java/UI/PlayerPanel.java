@@ -16,13 +16,10 @@ public class PlayerPanel extends JPanel  {
         this.frame = frame;
         W = frame.getWidth();
         H = frame.getHeight();
-        row = 0;
-        col = 0;
         setLayout(null);
         background = new ImageIcon("pictures/tanfang.png").getImage();
         initHistoryList();
         if (rankList != null) {
-            System.out.println(1);
             initComponents();
             add(menuPanel);
             add(menu);

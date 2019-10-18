@@ -25,6 +25,10 @@ public class GamePanel extends JPanel {
         add(playerIcon);
         add(playerTitle);
         add(playerName);
+        add(draw);
+        add(showBack);
+        add(showMid);
+        add(showFore);
     }
 
     private void initComponents() {
@@ -42,6 +46,10 @@ public class GamePanel extends JPanel {
         scoreImage = new ImagePanel("pictures/scoreboard.png");
         close = new JButton();
         playerName = new JLabel();
+        draw = new JButton();
+        showBack = new JButton();
+        showMid = new JButton();
+        showFore = new JButton();
 
         menu.setText("菜单");
         menu.setFont(new Font("微软雅黑", 1, 30));
@@ -125,7 +133,7 @@ public class GamePanel extends JPanel {
         close.setBackground(new Color(55, 155, 211));
         close.setForeground(Color.WHITE);
         close.setBackground(Color.RED);
-        close.setBounds(15 * W / 32, 0, W / 18,H / 18);
+        close.setBounds(15 * W / 32, 0, W / 18, H / 18);
         close.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -134,6 +142,78 @@ public class GamePanel extends JPanel {
                 menu.setEnabled(true);
                 updateUI();
                 repaint();
+            }
+        });
+
+        draw.setText("出牌");
+        draw.setFont(new Font("微软雅黑", 1, 40));
+        draw.setBackground(Color.RED);
+        draw.setForeground(Color.WHITE);
+        draw.setBounds(W - 5 * H / 12 + 10, 5 * H / 7, H / 7, H / 7);
+        draw.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
+                    //scorePanel.setVisible(true);
+                    scoreboard.setEnabled(false);
+                    menu.setEnabled(false);
+                    updateUI();
+                    repaint();
+                }
+            }
+        });
+
+        showFore.setText("前墩");
+        showFore.setFont(new Font("微软雅黑", 1, 30));
+        showFore.setForeground(new Color(55, 155, 211));
+        showFore.setContentAreaFilled(false);
+        showFore.setBounds(470, 5 * H / 7, H / 7, H / 7);
+        showFore.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
+                    //scorePanel.setVisible(true);
+                    scoreboard.setEnabled(false);
+                    menu.setEnabled(false);
+                    updateUI();
+                    repaint();
+                }
+            }
+        });
+
+        showMid.setText("中墩");
+        showMid.setFont(new Font("微软雅黑", 1, 30));
+        showMid.setForeground(new Color(55, 155, 211));
+        showMid.setContentAreaFilled(false);
+        showMid.setBounds(730, 5 * H / 7, H / 7, H / 7);
+        showMid.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
+                    //scorePanel.setVisible(true);
+                    scoreboard.setEnabled(false);
+                    menu.setEnabled(false);
+                    updateUI();
+                    repaint();
+                }
+            }
+        });
+
+        showBack.setText("后墩");
+        showBack.setFont(new Font("微软雅黑", 1, 30));
+        showBack.setForeground(new Color(55, 155, 211));
+        showBack.setContentAreaFilled(false);
+        showBack.setBounds(990, 5 * H / 7, H / 7, H / 7);
+        showBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (menuPanel.isVisible() == false && scorePanel.isVisible() == false) {
+                    //scorePanel.setVisible(true);
+                    scoreboard.setEnabled(false);
+                    menu.setEnabled(false);
+                    updateUI();
+                    repaint();
+                }
             }
         });
 
@@ -161,4 +241,8 @@ public class GamePanel extends JPanel {
     private JPanel scorePanel;
     private ImagePanel scoreImage;
     private JButton close;
+    private JButton draw;
+    private JButton showFore;
+    private JButton showMid;
+    private JButton showBack;
 }
