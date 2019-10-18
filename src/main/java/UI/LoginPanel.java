@@ -1,6 +1,7 @@
 package UI;
 
 import Client.UserActivity;
+import Model.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,7 +78,7 @@ public class LoginPanel extends JPanel {
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //UserActivity.user = UserActivity.login(new User(user.getText(), pwd.getText()));
+                UserActivity.user = UserActivity.login(new User(user.getText(), pwd.getText()));
                 backPanel.setVisible(false);
                 loginSuccess.setVisible(true);
                 if (UserActivity.user == null)
@@ -132,8 +133,8 @@ public class LoginPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (UserActivity.user == null) {
                     frame.getContentPane().removeAll();
-                    //frame.setContentPane(new UI.TitlePanel(frame));
-                    frame.setContentPane(new GameLobbyPanel(frame));
+                    frame.setContentPane(new UI.TitlePanel(frame));
+                    //frame.setContentPane(new GameLobbyPanel(frame));
                     frame.setVisible(true);
                 }
                 else {

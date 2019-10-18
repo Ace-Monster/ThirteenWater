@@ -84,6 +84,9 @@ public class CardTablePanel extends JPanel {
                     System.out.println(history.getScore());
                     System.out.println(history.getTimeStamp());
                 }
+                else {
+                    System.out.println(1);
+                }
             }
         });
     }
