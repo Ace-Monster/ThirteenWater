@@ -1,5 +1,6 @@
 package Model;
 
+import AI.Type;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Poker {
     }
 
     public void addRank(long rank) {
-        this.rank += rank;
+        this.rank += (rank * Type.CardRank[pk.size()-1]);
     }
 
     public ArrayList<Pair<Integer, Integer>> getPk() {
